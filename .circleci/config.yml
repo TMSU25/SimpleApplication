@@ -12,11 +12,14 @@ workflows:
 
 jobs:
   build:
-    machine:
-      image: ubuntu-2204:current
-    working_directory: ~/SimpleApplication
+    working_directory: ~/SimpleApplication 
+    docker:
+      - image: circleci/node:10.16.3 
     steps:
       - checkout
+      - run:
+          name: Update npm
+          command: sudo npm install -g npm@5
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -28,7 +31,3 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
-      - persist_to_workspace:
-          root: .
-          paths:
-            - SimpleApplication
